@@ -1,0 +1,16 @@
+{
+  "name": "schedule-agent-runtime",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Server-side agent runtime for AI Schedule",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "check": "node --check src/server.js && node --check src/runtime.js && node --check src/agent.js && node --check src/smart-replan.js && node --check ../utils/llm-schedule.js && node --check src/clock.js && node --check src/database.js && node --check src/tools.js && node --check evals/run-live.js && node --check evals/cases.js",
+    "test": "node --test test/*.test.js",
+    "eval:agent": "node evals/run-live.js"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

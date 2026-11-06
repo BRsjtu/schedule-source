@@ -1,0 +1,39 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/history/history",
+    "pages/memory/memory",
+    "pages/task-edit/task-edit",
+    "pages/timer/timer"
+  ],
+  "tabBar": {
+    "color": "#717b78",
+    "selectedColor": "#13c59a",
+    "backgroundColor": "#101312",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "智排"
+      },
+      {
+        "pagePath": "pages/history/history",
+        "text": "日程"
+      },
+      {
+        "pagePath": "pages/memory/memory",
+        "text": "记忆"
+      }
+    ]
+  },
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "custom"
+  },
+  "permission": {
+    "scope.record": {
+      "desc": "用于把语音转换成日程文字"
+    }
+  },
+  "renderer": "webview"
+}

@@ -1,0 +1,29 @@
+<view class="utility-shell {{themeClass}}">
+  <navigation-bar lang="{{lang}}" title="{{i18n.editTask}}" back="{{true}}" color="{{navColor}}" background="{{navBackground}}" />
+  <scroll-view scroll-y class="utility-scroll">
+    <view class="utility-body">
+      <view class="field-label">{{i18n.taskName}}</view>
+      <input class="field-box" value="{{form.title}}" maxlength="100" data-key="title" bindinput="inputField" placeholder="{{i18n.taskName}}" />
+      <view class="field-label">{{i18n.taskDate}}</view>
+      <picker mode="date" value="{{form.dateKey}}" data-key="dateKey" bindchange="inputField"><view class="field-box">{{form.dateKey}}　›</view></picker>
+      <view class="recommendation-card">
+        <view class="card-caption">✦ {{i18n.recommendTitle}}</view>
+        <view class="card-title">{{recommendation.text}}</view>
+        <view class="muted-copy">{{i18n.historyBasis}}</view>
+        <button class="secondary-button" bindtap="adoptRecommendation">{{i18n.adoptRecommendation}}</button>
+      </view>
+      <view class="field-label">{{i18n.taskDuration}}</view>
+      <input class="field-box" type="number" value="{{form.estimatedMinutes}}" placeholder="{{recommendation.minutes}}" data-key="estimatedMinutes" bindinput="inputField" />
+      <view class="field-label">{{i18n.taskSlot}}</view>
+      <picker range="{{slotLabels}}" value="{{slotIndex}}" bindchange="changeSlot"><view class="field-box">{{slotLabels[slotIndex]}}　›</view></picker>
+      <view class="field-label">{{i18n.taskPriority}}</view>
+      <picker range="{{priorityLabels}}" value="{{priorityIndex}}" bindchange="changePriority"><view class="field-box">{{priorityLabels[priorityIndex]}}　›</view></picker>
+      <view class="switch-row"><text>{{i18n.useFixedTime}}</text><switch checked="{{fixed}}" color="#08aa87" bindchange="changeFixed" /></view>
+      <picker wx:if="{{fixed}}" mode="time" value="{{form.dueClock}}" data-key="dueClock" bindchange="inputField"><view class="field-box">{{i18n.fixedTime}} · {{form.dueClock}}　›</view></picker>
+      <view class="field-label">{{i18n.taskDescription}}</view>
+      <textarea class="field-box description-box" value="{{form.description}}" maxlength="500" data-key="description" bindinput="inputField" />
+      <view class="preview-card"><view class="muted-copy">{{i18n.previewSchedule}}</view><view class="card-title">{{preview}}</view><view class="muted-copy">{{i18n.scheduleNotice}}</view></view>
+      <button class="primary-button" loading="{{saving}}" disabled="{{saving}}" bindtap="saveTask">{{saving ? i18n.smartReplanBusy : i18n.smartSaveTask}}</button>
+    </view>
+  </scroll-view>
+</view>

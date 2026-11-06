@@ -1,0 +1,110 @@
+<view class="chat-shell {{themeClass}}" style="{{layoutStyle}}">
+  <view class="chat-top">
+    <view class="top-left">
+      <view class="round-icon theme-button" bindtap="toggleTheme" aria-role="button" aria-label="{{themeText}}">{{themeLabel}}</view>
+      <view class="round-icon lang-button" bindtap="toggleLang" aria-role="button" aria-label="Switch language">{{langLabel}}</view>
+    </view>
+    <view class="top-actions">
+      <navigator class="round-icon" url="/pages/history/history" open-type="switchTab" aria-label="{{i18n.navSchedule}}">📅</navigator>
+    </view>
+  </view>
+
+  <scroll-view class="chat-scroll" scroll-y type="list" scroll-with-animation>
+    <view class="welcome-card">
+      <view class="welcome-badge">AI</view>
+      <view class="hello">{{i18n.hello}}</view>
+      <view class="assistant-name">{{i18n.assistantName}}</view>
+      <view class="assistant-copy">{{i18n.assistantCopy}}</view>
+      <view class="intent-row">
+        <view class="intent-chip" data-prompt="{{i18n.promptCreate}}" bindtap="useQuickPrompt">{{i18n.chipCreate}}</view>
+        <view class="intent-chip" data-prompt="{{i18n.promptToday}}" bindtap="useQuickPrompt">{{i18n.chipToday}}</view>
+        <view class="intent-chip" data-prompt="{{i18n.promptFree}}" bindtap="useQuickPrompt">{{i18n.chipFree}}</view>
+        <view class="intent-chip" data-fill="true" data-prompt="{{i18n.promptMemory}}" bindtap="useQuickPrompt">{{i18n.chipMemory}}</view>
+      </view>
+    </view>
+
+    <navigator wx:if="{{activeSession}}" class="session-ribbon" url="/pages/timer/timer?id={{activeSession.id}}">◷ {{activeSession.title}} · {{i18n.activeSession}} →</navigator>
+
+    <view wx:for="{{messages}}" wx:key="id" class="message-row {{item.isUser ? 'message-user' : 'message-agent'}}">
+      <view class="message-bubble">
+        <view class="message-content">{{item.content}}</view>
+        <view class="message-time">{{item.timeText}}</view>
+      </view>
+    </view>
+
+    <view wx:if="{{pendingDraft}}" class="confirm-card">
+      <view class="confirm-header">
+        <view class="confirm-icon">✓</view>
+        <view class="confirm-title">{{i18n.confirmPrefix}} {{pendingDraft.actions.length}} {{i18n.confirmSuffix}}</view>
+      </view>
+      <view class="confirm-list">
+        <view class="confirm-item" wx:for="{{pendingDraft.actions}}" wx:key="id">
+          <view class="confirm-dot"></view>
+          <view class="confirm-body">
+            <view class="confirm-line">
+              <view class="confirm-tag">{{item.label}}</view>
+              <view class="confirm-text">{{item.titleText}}</view>
+            </view>
+            <view wx:if="{{item.memoryValue}}" class="confirm-meta">{{i18n.memoryNewValue}} · {{item.memoryValue}}</view>
+            <view wx:if="{{item.dateText || item.scheduleText || item.durationText}}" class="confirm-meta">
+              <text wx:if="{{item.dateText}}" class="confirm-date">{{item.dateText}}</text>
+              <text wx:if="{{item.scheduleText}}" class="confirm-time">{{item.scheduleText}}</text>
+              <text wx:if="{{item.durationText}}" class="confirm-duration">{{item.durationText}}</text>
+            </view>
+            <view class="confirm-meta" wx:for="{{item.previewSchedule}}" wx:for-item="slot" wx:key="id">
+              <view>{{slot.title}} · {{slot.afterText}}</view><view>{{slot.reasonText}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="confirm-actions">
+        <button class="cancel-button" bindtap="discardDraft">{{i18n.cancel}}</button>
+        <button class="confirm-button" bindtap="confirmDraft">{{i18n.confirm}}</button>
+      </view>
+    </view>
+
+    <view wx:if="{{loading}}" class="thinking-row">
+      <view class="thinking-dot"></view>
+      <view class="thinking-dot delay-1"></view>
+      <view class="thinking-dot delay-2"></view>
+      <view class="thinking-label">{{i18n.processing}}</view>
+    </view>
+  </scroll-view>
+
+  <view class="bottom-bar {{isRecording || isTranscribing ? 'voice-active' : ''}}">
+    <view wx:if="{{isRecording}}" class="voice-panel">
+      <view class="voice-action voice-cancel" bindtap="cancelVoiceRecording" aria-role="button" aria-label="{{i18n.voiceCancelLabel}}">
+        <view class="cancel-glyph"></view>
+      </view>
+      <view class="voice-live">
+        <view class="voice-wave" aria-hidden="true">
+          <view class="voice-bar bar-1"></view>
+          <view class="voice-bar bar-2"></view>
+          <view class="voice-bar bar-3"></view>
+          <view class="voice-bar bar-4"></view>
+          <view class="voice-bar bar-5"></view>
+        </view>
+        <view class="voice-status">{{i18n.listening}}</view>
+        <view class="voice-duration">{{voiceDurationText}}</view>
+      </view>
+      <view class="voice-action voice-done" bindtap="finishVoiceRecording" aria-role="button" aria-label="{{i18n.voiceDoneLabel}}">✓</view>
+    </view>
+
+    <view wx:elif="{{isTranscribing}}" class="transcribing-panel">
+      <view class="transcribing-spinner"></view>
+      <view class="transcribing-text">{{i18n.transcribing}}</view>
+    </view>
+
+    <block wx:else>
+      <view class="voice-button {{voiceStarting ? 'voice-starting' : ''}}" bindtap="toggleVoiceInput" aria-role="button" aria-label="{{i18n.voiceButtonLabel}}">
+        <view class="mic-glyph">
+          <view class="mic-head"></view>
+          <view class="mic-arc"></view>
+          <view class="mic-stem"></view>
+        </view>
+      </view>
+      <textarea class="chat-input" value="{{inputText}}" auto-height maxlength="500" placeholder="{{i18n.inputPlaceholder}}" bindinput="onInput" bindtouchstart="onInputTouchStart" bindlongpress="onInputLongPress" bindtouchend="onInputTouchEnd" bindtouchcancel="onInputTouchCancel" confirm-type="send" bindconfirm="sendAgentMessage"></textarea>
+      <button class="send-button" loading="{{loading}}" bindtap="sendAgentMessage">{{i18n.send}}</button>
+    </block>
+  </view>
+</view>

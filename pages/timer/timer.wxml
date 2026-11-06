@@ -1,0 +1,34 @@
+<view class="utility-shell {{themeClass}}">
+  <navigation-bar lang="{{lang}}" title="{{i18n.timerTitle}}" back="{{true}}" color="{{navColor}}" background="{{navBackground}}" />
+  <scroll-view class="utility-scroll" scroll-y>
+    <view class="utility-body">
+      <block wx:if="{{task}}">
+        <view class="timer-meta">{{task.dateKey}} · {{statusText}}</view>
+        <view class="timer-task-title">{{task.title}}</view>
+        <view class="timer-face">
+          <view class="muted-copy">{{i18n.elapsedLabel}}</view>
+          <view class="timer-clock">{{elapsedClock}}</view>
+          <view class="progress-track"><view class="progress-fill" style="width: {{progress}}%;"></view></view>
+          <view class="muted-copy">{{comparisonText}}</view>
+        </view>
+        <block wx:if="{{task.status !== 'completed'}}">
+          <view class="timer-actions">
+            <button wx:if="{{task.status === 'running'}}" class="secondary-button" bindtap="pause">Ⅱ {{i18n.pauseTimer}}</button>
+            <button wx:else class="secondary-button" bindtap="resume">▷ {{i18n.resumeTimer}}</button>
+            <button class="secondary-button" bindtap="stuck">{{i18n.stuckButton}}</button>
+          </view>
+          <button class="primary-button" bindtap="finish">✓ {{i18n.finishTimer}}</button>
+          <view class="muted-copy stuck-note">{{stuckText}}</view>
+        </block>
+        <view wx:else class="feedback-card">
+          <view class="card-caption">✓ {{i18n.done}}</view>
+          <view class="card-title">{{feedbackText}}</view>
+          <view class="muted-copy">{{comparisonText}}</view>
+          <button class="secondary-button" bindtap="adjustEstimate">{{i18n.nextEstimate}}</button>
+        </view>
+      </block>
+      <view wx:else class="card-title">{{i18n.timerMissing}}</view>
+      <button class="secondary-button" bindtap="backToSchedule">{{i18n.returnSchedule}}</button>
+    </view>
+  </scroll-view>
+</view>

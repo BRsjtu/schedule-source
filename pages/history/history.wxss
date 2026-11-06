@@ -1,0 +1,430 @@
+page {
+  height: 100%;
+  background: #0d0f0e;
+}
+
+.schedule-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: #e8ece9;
+  background: #0d0f0e;
+}
+
+.schedule-scroll {
+  flex: 1;
+  min-height: 0;
+}
+
+.schedule-page {
+  padding: 24rpx 24rpx 46rpx;
+  padding-bottom: calc(46rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(46rpx + env(safe-area-inset-bottom));
+}
+
+/* ── Calendar header ── */
+.calendar-head,
+.day-panel-head,
+.event-top,
+.event-actions,
+.panel-actions,
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12rpx;
+}
+
+.calendar-head {
+  padding: 22rpx 4rpx 20rpx;
+}
+
+.nav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 999rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 42rpx;
+}
+
+.theme-button,
+.lang-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72rpx;
+  height: 72rpx;
+  padding: 0 18rpx;
+  border-radius: 999rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.lang-toggle {
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.month-label {
+  text-align: center;
+  font-size: 38rpx;
+  font-weight: 800;
+}
+
+.month-subtitle {
+  margin-top: 6rpx;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 22rpx;
+}
+
+/* ── Calendar grid ── */
+.weekday-row,
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6rpx;
+}
+
+.weekday {
+  padding: 14rpx 0;
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.day-cell {
+  position: relative;
+  min-height: 80rpx;
+  border-radius: 16rpx;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.muted-day {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.selected-day {
+  color: #ffffff;
+  background: linear-gradient(135deg, #0ea882, #08aa87);
+  box-shadow: 0 8rpx 24rpx rgba(8, 170, 135, 0.3);
+}
+
+.day-number {
+  padding: 12rpx 0 0 14rpx;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.day-dot {
+  position: absolute;
+  right: 8rpx;
+  bottom: 8rpx;
+  min-width: 28rpx;
+  height: 28rpx;
+  padding: 0 6rpx;
+  border-radius: 999rpx;
+  color: #ffffff;
+  background: rgba(30, 136, 255, 0.85);
+  text-align: center;
+  font-size: 18rpx;
+  line-height: 28rpx;
+}
+
+.today-line {
+  position: absolute;
+  left: 14rpx;
+  bottom: 8rpx;
+  width: 28rpx;
+  height: 4rpx;
+  border-radius: 999rpx;
+  background: #13c59a;
+}
+
+/* ── Day panel ── */
+.day-panel {
+  margin-top: 28rpx;
+  padding: 28rpx;
+  border-radius: 16rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.day-title {
+  font-size: 34rpx;
+  font-weight: 800;
+}
+
+.day-summary {
+  margin-top: 6rpx;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 23rpx;
+}
+
+.small-action {
+  padding: 10rpx 20rpx;
+  border-radius: 999rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 23rpx;
+  font-weight: 600;
+}
+
+.primary-action {
+  color: #ffffff;
+  border-color: rgba(8, 170, 135, 0.3);
+  background: linear-gradient(135deg, #0ea882, #08aa87);
+}
+
+/* ── Timeline ── */
+.timeline-item {
+  display: grid;
+  grid-template-columns: 126rpx 24rpx 1fr;
+  gap: 14rpx;
+  margin-top: 28rpx;
+}
+
+.timeline-time {
+  color: #58a6ff;
+  font-size: 23rpx;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.timeline-line {
+  width: 3rpx;
+  min-height: 100%;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.event-card {
+  padding: 22rpx;
+  border-radius: 16rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.event-title {
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.event-status {
+  flex: 0 0 auto;
+  padding: 6rpx 14rpx;
+  border-radius: 999rpx;
+  color: #13c59a;
+  background: rgba(19, 197, 154, 0.1);
+  font-size: 21rpx;
+  font-weight: 600;
+}
+
+.event-meta,
+.event-desc,
+.event-feedback {
+  margin-top: 10rpx;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 23rpx;
+  line-height: 1.45;
+}
+
+.event-feedback {
+  color: #e9b45b;
+}
+
+.event-actions {
+  justify-content: flex-end;
+  margin-top: 18rpx;
+}
+
+button {
+  margin: 0;
+  border-radius: 16rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  line-height: 2.25;
+}
+
+button::after {
+  border: 0;
+}
+
+.ghost-button {
+  color: rgba(255, 255, 255, 0.8);
+  border: 1rpx solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.done-button {
+  color: #ffffff;
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+}
+
+/* ── Empty state ── */
+.empty-schedule {
+  padding: 58rpx 20rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 56rpx;
+  margin-bottom: 16rpx;
+}
+
+.empty-title {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.empty-text {
+  margin-top: 10rpx;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 24rpx;
+}
+
+/* ═══════ Light theme ═══════ */
+.schedule-shell.theme-light {
+  color: #1a2530;
+  background:
+    linear-gradient(180deg, #f5f9f8 0%, #eef3f1 42%, #f7faf9 100%);
+}
+
+.schedule-shell.theme-light .nav-button,
+.schedule-shell.theme-light .theme-button,
+.schedule-shell.theme-light .lang-toggle,
+.schedule-shell.theme-light .small-action {
+  color: #374550;
+  border-color: rgba(23, 33, 43, 0.06);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 4rpx 16rpx rgba(20, 42, 55, 0.06);
+}
+
+.schedule-shell.theme-light .month-label,
+.schedule-shell.theme-light .day-title,
+.schedule-shell.theme-light .event-title,
+.schedule-shell.theme-light .empty-title {
+  color: #1a2530;
+}
+
+.schedule-shell.theme-light .month-subtitle,
+.schedule-shell.theme-light .weekday,
+.schedule-shell.theme-light .day-summary,
+.schedule-shell.theme-light .event-meta,
+.schedule-shell.theme-light .event-desc,
+.schedule-shell.theme-light .empty-text {
+  color: #7a8890;
+}
+
+.schedule-shell.theme-light .day-cell {
+  color: #374550;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 0 0 1rpx rgba(16, 62, 80, 0.04);
+}
+
+.schedule-shell.theme-light .muted-day {
+  color: #a7b1b8;
+}
+
+.schedule-shell.theme-light .selected-day {
+  color: #ffffff;
+  background: linear-gradient(135deg, #0ca87a, #0a8f72);
+  box-shadow: 0 8rpx 24rpx rgba(10, 143, 114, 0.25);
+}
+
+.schedule-shell.theme-light .day-panel {
+  border-color: rgba(23, 33, 43, 0.04);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 8rpx 32rpx rgba(20, 42, 55, 0.06);
+}
+
+.schedule-shell.theme-light .event-card {
+  border-color: rgba(23, 33, 43, 0.04);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 4rpx 16rpx rgba(20, 42, 55, 0.04);
+}
+
+.schedule-shell.theme-light .timeline-time {
+  color: #1976d2;
+}
+
+.schedule-shell.theme-light .timeline-line {
+  background: rgba(23, 33, 43, 0.1);
+}
+
+.schedule-shell.theme-light .event-status {
+  color: #0a8f72;
+  background: rgba(10, 143, 114, 0.08);
+}
+
+.schedule-shell.theme-light .event-feedback {
+  color: #9a6214;
+}
+
+.schedule-shell.theme-light .primary-action {
+  color: #ffffff;
+  border-color: transparent;
+  background: linear-gradient(135deg, #0ca87a, #0a8f72);
+}
+
+.schedule-shell.theme-light .ghost-button {
+  color: #374550;
+  border-color: rgba(23, 33, 43, 0.06);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.schedule-shell.theme-light .done-button {
+  color: #ffffff;
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+}
+
+/* Additional controls retain the existing calendar and timeline. */
+.day-panel-head, .panel-actions, .event-actions { flex-wrap: wrap; }
+.event-card { min-width: 0; }
+.event-title { overflow-wrap: anywhere; }
+.timeline-item { grid-template-columns: 98rpx 12rpx minmax(0, 1fr); gap: 10rpx; }
+.event-actions { gap: 10rpx; }
+.event-actions button { padding: 0 16rpx; font-size: 22rpx; }
+.plan-controls { margin-top: 24rpx; }
+.mode-row { display: flex; gap: 8rpx; padding: 6rpx; border-radius: 16rpx; background: rgba(128,128,128,.1); }
+.mode-choice { flex: 1; padding: 16rpx 4rpx; text-align: center; border-radius: 12rpx; font-size: 24rpx; }
+.selected-mode { background: #087e66; color: #fff; font-weight: 700; }
+.control-hint { font-size: 22rpx; color: #8b9d95; line-height: 1.6; margin-top: 10rpx; }
+.dynamic-row { display: flex; justify-content: space-between; align-items: center; gap: 16rpx; margin: 20rpx 0; font-size: 27rpx; }
+.dynamic-row switch { flex-shrink: 0; transform: scale(.85); }
+.schedule-button { width: 100%; }
+.active-session { margin-top: 20rpx; padding: 20rpx; border-radius: 14rpx; color: #13c59a; background: rgba(19,197,154,.09); font-size: 25rpx; }
+.suggestion-bubble { padding: 24rpx; margin-top: 22rpx; border-radius: 24rpx 24rpx 24rpx 4rpx; background: rgba(19,197,154,.08); }
+.suggestion-bubble button { margin-top: 18rpx; }
+.dragging-task { opacity: .8; transform: scale(1.02); }
+.theme-light .control-hint { color: #63786e; }
+.theme-light .active-session { color: #087e66; }
+.replan-result { margin-top: 24rpx; padding: 24rpx; border: 2rpx solid rgba(19,197,154,.4); border-radius: 20rpx; background: rgba(19,197,154,.08); }
+.replan-heading { font-size: 30rpx; font-weight: 800; color: #3ad3af; }
+.replan-copy { margin-top: 12rpx; font-size: 25rpx; line-height: 1.65; }
+.replan-basis { margin-top: 8rpx; font-size: 23rpx; line-height: 1.6; color: #99b2a8; }
+.replan-change { margin-top: 18rpx; padding-top: 18rpx; border-top: 1rpx solid rgba(128,128,128,.2); }
+.replan-task-title { font-size: 27rpx; font-weight: 700; }
+.replan-times { margin-top: 8rpx; font-size: 26rpx; line-height: 1.5; font-weight: 700; color: #3ad3af; }
+.replan-before { color: #99b2a8; font-weight: 400; }
+.replan-time { margin-top: 18rpx; font-size: 21rpx; color: #99b2a8; }
+.replan-warning { margin-top: 12rpx; color: #eab467; font-size: 24rpx; }
+.replan-highlight .event-card { border: 2rpx solid #08aa87; }
+.replan-task-change { margin-top: 12rpx; font-size: 23rpx; line-height: 1.5; color: #3ad3af; }
+.theme-light .replan-heading, .theme-light .replan-times, .theme-light .replan-task-change { color: #087e66; }
+.theme-light .replan-basis, .theme-light .replan-before, .theme-light .replan-time { color: #50695d; }
+.theme-light .replan-warning { color: #92611d; }
+.replan-request { width: 100%; box-sizing: border-box; height: 80rpx; padding: 0 20rpx; margin: 14rpx 0; border-radius: 16rpx; background: var(--card-bg, rgba(128,128,128,.12)); color: inherit; font-size: 26rpx; }

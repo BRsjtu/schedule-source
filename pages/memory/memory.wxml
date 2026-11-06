@@ -1,0 +1,104 @@
+<view class="app-shell {{themeClass}}">
+  <navigation-bar lang="{{lang}}" title="{{i18n.navMemory}}" color="{{navColor}}" background="{{navBackground}}"></navigation-bar>
+  <scroll-view class="page-scroll" scroll-y type="list">
+    <view class="page-body memory-page">
+      <view class="memory-head">
+        <view class="memory-head-text">
+          <view class="section-title">{{i18n.prefsTitle}}</view>
+          <view class="section-subtitle">{{i18n.prefsSubtitle}}</view>
+        </view>
+        <view class="memory-actions">
+          <view class="pill">{{i18n.localBadge}}</view>
+          <view class="icon-button" bindtap="toggleTheme">{{themeLabel}}</view>
+          <view class="icon-button lang-button" bindtap="toggleLang">{{langLabel}}</view>
+        </view>
+      </view>
+
+      <view class="prefs-panel">
+        <view class="panel-title">{{i18n.basicPrefs}}</view>
+        <view class="field-row">
+          <view class="field-label">{{i18n.startTime}}</view>
+          <input class="field-input" value="{{prefs.workdayStart}}" data-key="workdayStart" bindinput="onPreferenceInput"></input>
+        </view>
+        <view class="field-row">
+          <view class="field-label">{{i18n.endTime}}</view>
+          <input class="field-input" value="{{prefs.workdayEnd}}" data-key="workdayEnd" bindinput="onPreferenceInput"></input>
+        </view>
+        <view class="field-row">
+          <view class="field-label">{{i18n.breakTime}}</view>
+          <input class="field-input" type="number" value="{{prefs.defaultBreakMinutes}}" bindinput="onBreakInput"></input>
+        </view>
+        <view class="field-row last-row">
+          <view class="field-label">{{i18n.toneSetting}}</view>
+          <input class="field-input" value="{{toneText}}" data-key="tone" bindinput="onPreferenceInput"></input>
+        </view>
+        <button class="primary-button save-button" bindtap="savePreferences">{{i18n.savePrefs}}</button>
+      </view>
+
+      <view class="memory-section">
+        <view class="panel-title">{{i18n.secretaryProfile}}</view>
+        <block wx:if="{{facts.length}}">
+          <view class="fact-card" wx:for="{{facts}}" wx:key="id">
+            <view class="fact-top">
+              <view class="fact-kind">{{item.kindText}}</view>
+              <view class="fact-confidence">{{item.confidenceText}}</view>
+            </view>
+            <view class="fact-key">{{item.keyText}}</view>
+            <view class="fact-value">{{item.valueText}}</view>
+            <view class="fact-evidence" data-id="{{item.id}}" bindtap="viewMemorySource"><text wx:if="{{item.evidence}}">{{i18n.memoryConfirmed}} · </text>{{i18n.memoryViewSource}}</view>
+            <view class="fact-time">{{item.timeText}}</view>
+          </view>
+        </block>
+        <view wx:else class="empty-card">
+          <view class="empty-title">{{i18n.noProfile}}</view>
+          <view class="empty-text">{{i18n.noProfileHint}}</view>
+        </view>
+      </view>
+
+      <view class="memory-section">
+        <view class="panel-title">{{i18n.taskPatterns}}</view>
+        <block wx:if="{{patterns.length}}">
+          <view class="pattern-card" wx:for="{{patterns}}" wx:key="key">
+            <view>
+              <view class="pattern-title">{{item.title}}</view>
+              <view class="pattern-desc">{{item.desc}}</view>
+            </view>
+            <view class="pattern-time">{{item.avgText}}</view>
+          </view>
+        </block>
+        <view wx:else class="empty-card">
+          <view class="empty-title">{{i18n.noPatterns}}</view>
+          <view class="empty-text">{{i18n.noPatternsHint}}</view>
+        </view>
+      </view>
+
+      <view class="memory-section">
+        <view class="panel-title">{{i18n.agentNotes}}</view>
+        <block wx:if="{{notes.length}}">
+          <view class="note-card" wx:for="{{notes}}" wx:key="id">
+            <view class="note-key" data-id="{{item.id}}" bindtap="viewMemorySource">{{item.keyText}}</view>
+            <view class="note-value">{{item.valueText}}</view>
+            <view class="note-time">{{item.timeText}}</view>
+          </view>
+        </block>
+        <view wx:else class="empty-card">
+          <view class="empty-title">{{i18n.noNotes}}</view>
+          <view class="empty-text">{{i18n.noNotesHint}}</view>
+        </view>
+      </view>
+
+      <view class="danger-zone">
+        <view class="memory-section">
+          <view class="panel-title">{{i18n.completionRate}}</view>
+          <view class="pattern-desc">{{i18n.rateDescription}}</view>
+          <view class="pattern-card" wx:for="{{slotRates}}" wx:key="slot">
+            <view><view class="pattern-title">{{item.title}}</view><view class="pattern-desc">{{item.detail}}</view></view>
+            <view class="pattern-time">{{item.rate}}</view>
+          </view>
+        </view>
+        <button class="ghost-button" bindtap="clearChat">{{i18n.clearChat}}</button>
+        <button class="danger-button" bindtap="resetMemory">{{i18n.resetMemory}}</button>
+      </view>
+    </view>
+  </scroll-view>
+</view>

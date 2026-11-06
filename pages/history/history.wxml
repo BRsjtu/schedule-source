@@ -1,0 +1,121 @@
+<view class="schedule-shell {{themeClass}}">
+  <navigation-bar lang="{{lang}}" title="{{i18n.navSchedule}}" color="{{navColor}}" background="{{navBackground}}"></navigation-bar>
+  <scroll-view class="schedule-scroll" scroll-y="{{!draggingTaskId}}" scroll-into-view="{{replanAnchor}}" scroll-with-animation type="list">
+    <view class="schedule-page">
+      <view class="calendar-head">
+        <view class="nav-button" bindtap="prevMonth">‹</view>
+        <view>
+          <view class="month-label">{{monthLabel}}</view>
+          <view class="month-subtitle">{{i18n.viewByDate}}</view>
+        </view>
+        <view class="header-actions">
+          <view class="nav-button" bindtap="nextMonth">›</view>
+          <view class="theme-button" bindtap="toggleTheme">{{themeLabel}}</view>
+          <view class="lang-toggle" bindtap="toggleLang">{{langLabel}}</view>
+        </view>
+      </view>
+
+      <view class="weekday-row">
+        <view wx:for="{{weekdayLabels}}" wx:key="*this" class="weekday">{{item}}</view>
+      </view>
+
+      <view class="month-grid">
+        <view wx:for="{{calendarDays}}" wx:key="dateKey" data-date="{{item.dateKey}}" bindtap="selectDate" class="day-cell {{item.isCurrentMonth ? '' : 'muted-day'}} {{item.isSelected ? 'selected-day' : ''}}">
+          <view class="day-number">{{item.day}}</view>
+          <view wx:if="{{item.taskCount}}" class="day-dot">{{item.taskCount}}</view>
+          <view wx:if="{{item.isToday}}" class="today-line"></view>
+        </view>
+      </view>
+
+      <view class="day-panel">
+        <view class="day-panel-head">
+          <view>
+            <view class="day-title">{{dayTitle}}</view>
+            <view class="day-summary">{{daySummary}}</view>
+          </view>
+          <view class="panel-actions">
+            <view class="small-action" bindtap="goToday">{{i18n.today}}</view>
+            <view class="small-action primary-action" bindtap="addManualTask">＋ {{i18n.manualTask}}</view>
+          </view>
+        </view>
+
+        <view class="plan-controls">
+          <view class="mode-row">
+            <view class="mode-choice {{planMode === 'relaxed' ? 'selected-mode' : ''}}" data-mode="relaxed" bindtap="changePlanMode">{{i18n.modeRelaxed}}</view>
+            <view class="mode-choice {{planMode === 'flexible' ? 'selected-mode' : ''}}" data-mode="flexible" bindtap="changePlanMode">{{i18n.modeFlexible}}</view>
+            <view class="mode-choice {{planMode === 'suggestion' ? 'selected-mode' : ''}}" data-mode="suggestion" bindtap="changePlanMode">{{i18n.modeSuggestion}}</view>
+          </view>
+          <view class="control-hint">{{modeHint}}</view>
+          <view class="dynamic-row">
+            <view><view>{{i18n.dynamicMode}}</view><view class="control-hint">{{dynamicPlan ? i18n.dynamicHint : i18n.dynamicManualHint}}</view></view>
+            <switch checked="{{dynamicPlan}}" color="#08aa87" bindchange="changeDynamicPlan" />
+          </view>
+          <view class="control-hint">{{i18n.replanRequestLabel}}</view>
+          <input class="replan-request" value="{{replanRequest}}" bindinput="onReplanRequest" maxlength="300" placeholder="{{i18n.replanRequestPlaceholder}}" />
+          <button class="ghost-button schedule-button" bindtap="rescheduleDay" loading="{{replanning}}" disabled="{{replanning}}">{{replanning ? i18n.smartReplanBusy : '✦ ' + i18n.aiSchedule}}</button>
+        </view>
+
+        <view wx:if="{{replanReport}}" id="replan-result" class="replan-result">
+          <view class="replan-heading">{{replanReport.title}}</view>
+          <view wx:if="{{replanReport.sourceText}}" class="replan-basis">{{replanReport.sourceText}}</view>
+          <view class="replan-copy">{{replanReport.body}}</view>
+          <view class="replan-basis">{{replanReport.basis}}</view>
+          <view class="replan-basis">{{replanReport.keptText}}</view>
+          <view wx:if="{{replanReport.warning}}" class="replan-warning">{{replanReport.warning}}</view>
+          <view class="replan-change" wx:for="{{replanReport.changes}}" wx:key="id">
+            <view class="replan-task-title">{{item.title}}</view>
+            <view class="replan-times"><text class="replan-before">{{item.beforeText}}</text><text> → {{item.afterText}}</text></view>
+            <view class="replan-basis">{{item.reasonText}} · {{item.detailText}}</view>
+          </view>
+          <view class="replan-time">{{i18n.replanLast}} · {{replanReport.timeText}}</view>
+          <view wx:if="{{replanReport.deferred.length}}" class="replan-basis">{{i18n.replanDeferredTitle}}</view>
+          <view class="replan-change" wx:for="{{replanReport.deferred}}" wx:key="id"><view class="replan-task-title">{{item.title}}</view><view class="replan-basis">{{item.reasonText}}</view></view>
+        </view>
+
+        <view wx:if="{{activeSession}}" class="active-session" bindtap="openActiveTimer">◷ {{activeSession.title}} · {{i18n.activeSession}} →</view>
+
+        <view wx:if="{{planMode === 'suggestion'}}" class="suggestion-panel">
+          <view class="suggestion-bubble" wx:for="{{suggestions}}" wx:key="id">
+            <view class="event-title">{{item.title}}</view>
+            <view class="event-meta">{{item.text}}</view>
+            <button class="ghost-button" data-id="{{item.id}}" bindtap="startTask">{{i18n.suggestionStart}}</button>
+          </view>
+          <view wx:if="{{!suggestions.length}}" class="empty-text">{{i18n.noPendingTasks}}</view>
+        </view>
+
+        <block wx:if="{{dayTasks.length}}">
+          <view class="timeline-item {{item.scheduleChanged ? 'replan-highlight' : ''}} {{draggingTaskId === item.id ? 'dragging-task' : ''}}" wx:for="{{dayTasks}}" wx:key="id" data-id="{{item.id}}" bindlongpress="beginTaskDrag" bindtouchmove="moveTaskDrag" bindtouchend="endTaskDrag" bindtouchcancel="endTaskDrag">
+            <view class="timeline-time">{{item.periodText}}</view>
+            <view class="timeline-line"></view>
+            <view class="event-card">
+              <view class="event-top">
+                <view class="event-title">{{item.title}}</view>
+                <view class="event-status">{{item.statusText}}</view>
+              </view>
+              <view class="event-meta">{{item.priorityText}} · {{item.estimateText}} · {{item.slotText}}</view>
+              <view wx:if="{{item.scheduleChanged}}" class="replan-task-change">{{i18n.replanMoved}} · {{item.previousPeriod}} → {{item.periodText}}</view>
+              <view wx:if="{{item.scheduleReason}}" class="event-meta">{{item.scheduleReason}}</view>
+              <view wx:if="{{item.description}}" class="event-desc">{{item.description}}</view>
+              <view wx:if="{{item.feedbackText}}" class="event-feedback">{{item.feedbackText}}</view>
+              <view wx:if="{{item.actualText}}" class="event-meta">{{i18n.estimated}} {{item.estimateText}} · {{i18n.actual}} {{item.actualText}}</view>
+              <view wx:if="{{item.scheduleConflict}}" class="event-feedback">{{i18n.conflictHint}}</view>
+              <view wx:elif="{{item.scheduleOverflow}}" class="event-feedback">{{i18n.overflowHint}}</view>
+              <view class="event-actions">
+                <button wx:if="{{item.status !== 'completed'}}" class="ghost-button" data-id="{{item.id}}" bindtap="editTask">{{i18n.editTask}}</button>
+                <button wx:if="{{item.status !== 'completed' && item.status !== 'running'}}" class="ghost-button" data-id="{{item.id}}" bindtap="startTask">{{i18n.start}}</button>
+                <button wx:if="{{item.status !== 'completed'}}" class="done-button" data-id="{{item.id}}" bindtap="completeTask">{{i18n.done}}</button>
+                <button wx:if="{{item.status === 'completed'}}" class="ghost-button" data-id="{{item.id}}" bindtap="adjustNextEstimate">{{i18n.nextEstimate}}</button>
+              </view>
+            </view>
+          </view>
+        </block>
+
+        <view wx:elif="{{planMode !== 'suggestion'}}" class="empty-schedule">
+          <view class="empty-icon">📭</view>
+          <view class="empty-title">{{i18n.noEvents}}</view>
+          <view class="empty-text">{{i18n.noEventsHint}}</view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

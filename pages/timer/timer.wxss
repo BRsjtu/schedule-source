@@ -1,0 +1,10 @@
+@import "../../styles/task-utility.wxss";
+.timer-meta { margin-top: 24rpx; text-align: center; color: #8fa99b; font-size: 25rpx; }
+.timer-task-title { margin: 22rpx 0; text-align: center; font-size: 40rpx; font-weight: 700; line-height: 1.5; }
+.timer-face { padding: 52rpx 16rpx 40rpx; text-align: center; }
+.timer-clock { margin: 26rpx 0 30rpx; font-size: 80rpx; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: 2rpx; }
+.progress-track { height: 10rpx; border-radius: 20rpx; background: rgba(140,175,155,.2); overflow: hidden; margin: 0 0 28rpx; }
+.progress-fill { height: 100%; background: #13c59a; border-radius: 20rpx; }
+.timer-actions { display: flex; gap: 20rpx; }
+.timer-actions button { flex: 1; }
+.stuck-note { text-align: center; margin-top: 24rpx; }

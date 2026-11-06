@@ -1,0 +1,16 @@
+{
+  "name": "ai-schedule-miniprogram",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI智排时程微信小程序",
+  "scripts": {
+    "check": "node ./tools/check.js",
+    "test": "npm run check && npm run test:i18n && npm run test:transcription && npm run test:voice && npm run test:crossday && npm run test:longrun && npm run test:lifecycle",
+    "test:lifecycle": "node ./tools/task-lifecycle-test.js && node ./tools/task-sync-test.js && node ./tools/replan-test.js",
+    "test:i18n": "node ./tools/i18n-test.js",
+    "test:transcription": "node ./tools/transcription-test.js",
+    "test:voice": "node ./tools/voice-input-test.js",
+    "test:crossday": "node ./tools/cross-day-schedule-test.js",
+    "test:longrun": "node ./tools/longrun-schedule-test.js"
+  }
+}
